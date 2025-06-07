@@ -14,12 +14,14 @@
           type="text"
           class="add-form-name"
           placeholder="Введите ваше имя"
+          id="add-form-name"
         />
         <textarea
           type="textarea"
           class="add-form-text"
           placeholder="Введите ваш коментарий"
           rows="4"
+          id="add-form-text"
         ></textarea>
         <div class="add-form-row">
           <button class="add-form-button">Написать</button>
@@ -31,8 +33,8 @@
       "use strict";
 
       const addFormButton = document.querySelector(".add-form-button");
-      const addFormNameInput = document.querySelector(".add-form-name");
-      const addFormTextInput = document.querySelector(".add-form-text");
+      const addFormNameInput = document.querySelector("#add-form-name"); 
+      const addFormTextInput = document.querySelector("#add-form-text"); 
       const commentsList = document.querySelector(".comments");
 
       let comments = [
@@ -62,17 +64,26 @@
         return `${day}.${month}.${year} ${hours}:${minutes}`;
       }
 
+      function escapeHtml(text) {
+          return text
+              .replaceAll("&", "&amp;")
+              .replaceAll("<", "&lt;")
+              .replaceAll(">", "&gt;")
+              .replaceAll('"', "&quot;")
+              .replaceAll("'", "&#039;");
+      }
+
       function renderComments() {
         commentsList.innerHTML = comments
           .map((comment, index) => {
-            return `<li class="comment">
+            return `<li class="comment" data-index="${index}">
                       <div class="comment-header">
-                        <div>${comment.name}</div>
+                        <div>${escapeHtml(comment.name)}</div>
                         <div>${comment.date}</div>
                       </div>
                       <div class="comment-body">
                         <div class="comment-text">
-                          ${comment.text}
+                          ${escapeHtml(comment.text)}
                         </div>
                       </div>
                       <div class="comment-footer">
@@ -87,31 +98,43 @@
           })
           .join("");
 
-          const likeButtons = document.querySelectorAll(".like-button");
-          likeButtons.forEach(button => {
-              button.addEventListener("click", handleLikeClick);
-          });
-      }
+        const likeButtons = document.querySelectorAll(".like-button");
+        likeButtons.forEach((button) => {
+          button.addEventListener("click", handleLikeClick);
+        });
 
+        const commentElements = document.querySelectorAll(".comment");
+        commentElements.forEach((commentElement) => {
+          commentElement.addEventListener("click", handleCommentClick);
+        });
+      }
 
       function handleLikeClick(event) {
-          const index = event.target.dataset.index;
+        event.stopPropagation(); 
+        const index = event.target.dataset.index;
 
-          if (comments[index].isLiked) {
-              comments[index].likes--;
-          } else {
-              comments[index].likes++;
-          }
+        if (comments[index].isLiked) {
+          comments[index].likes--;
+        } else {
+          comments[index].likes++;
+        }
 
-          comments[index].isLiked = !comments[index].isLiked;
-          renderComments();
+        comments[index].isLiked = !comments[index].isLiked;
+        renderComments(); 
       }
 
+      function handleCommentClick(event) {
+        const index = event.currentTarget.dataset.index; 
+        const comment = comments[index];
+
+        addFormNameInput.value = comment.name;
+        addFormTextInput.value = `> ${comment.name}: ${comment.text}\n`;
+        addFormTextInput.focus(); 
+      }
 
       addFormButton.addEventListener("click", () => {
-
-        const name = addFormNameInput.value;
-        const text = addFormTextInput.value;
+        const name = escapeHtml(addFormNameInput.value); 
+        const text = escapeHtml(addFormTextInput.value); 
 
         if (!name || !text) {
           alert("Пожалуйста, заполните все поля");
