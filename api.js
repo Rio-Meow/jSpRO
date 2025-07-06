@@ -14,7 +14,10 @@ try {
     return data.comments.map((comment) => {
     return {
         name: comment.author.name,
-        date: new Date(comment.date).toLocaleDateString() + " " + new Date(comment.date).toLocaleTimeString(),
+        date:
+        new Date(comment.date).toLocaleDateString() +
+        " " +
+        new Date(comment.date).toLocaleTimeString(),
         text: comment.text,
         likes: comment.likes,
         isLiked: false,

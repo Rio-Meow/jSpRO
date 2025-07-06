@@ -18,7 +18,7 @@ commentsList.innerHTML = comments
                         <span class="likes-counter">${comment.likes}</span>
                         <button data-index="${index}" class="like-button ${
         comment.isLiked ? "-active-like" : ""
-    }"></button>
+    } ${comment.isLikeLoading ? "-loading-like" : ""}" ></button>
                     </div>
                 </div>
             </li>`;

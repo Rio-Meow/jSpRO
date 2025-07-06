@@ -8,6 +8,7 @@
 
   <body>
     <div class="container">
+      <div class="loader" id="comments-loader">Загрузка комментариев...</div>
       <ul class="comments"></ul>
       <div class="add-form">
         <input
@@ -24,7 +25,12 @@
           id="add-form-text"
         ></textarea>
         <div class="add-form-row">
-          <button class="add-form-button">Написать</button>
+          <button class="add-form-button" id="add-form-button">
+            Написать
+          </button>
+          <div class="loader" id="add-comment-loader">
+            Отправка комментария...
+          </div>
         </div>
       </div>
     </div>

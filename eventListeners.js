@@ -44,7 +44,8 @@ export function handleAddComment(
   comments,
   commentsList,
   addComment,
-  loadComments
+  loadComments,
+  addCommentLoader 
 ) {
   addFormButton.addEventListener("click", () => {
     const name = escapeHtml(addFormNameInput.value);
@@ -55,10 +56,20 @@ export function handleAddComment(
       return;
     }
 
-    addComment({ name, text }).then(() => {
-      loadComments();
-    });
-    addFormNameInput.value = "";
-    addFormTextInput.value = "";
+    addFormButton.disabled = true;
+    addCommentLoader.style.display = "block";
+
+    addComment({ name, text })
+      .then(() => {
+        loadComments();
+        addFormNameInput.value = "";
+        addFormTextInput.value = "";
+      })
+      .finally(() => {
+        addFormButton.disabled = false;
+        addCommentLoader.style.display = "none";
+      });
   });
 }
+
+
