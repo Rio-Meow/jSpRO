@@ -42,7 +42,9 @@ export function handleAddComment(
   addFormNameInput,
   addFormTextInput,
   comments,
-  commentsList
+  commentsList,
+  addComment,
+  loadComments
 ) {
   addFormButton.addEventListener("click", () => {
     const name = escapeHtml(addFormNameInput.value);
@@ -53,22 +55,10 @@ export function handleAddComment(
       return;
     }
 
-    const now = new Date();
-    const formattedDate = formatDate(now);
-
-    const newComment = {
-      name: name,
-      date: formattedDate,
-      text: text,
-      likes: 0,
-      isLiked: false,
-    };
-
-    comments.push(newComment);
-
+    addComment({ name, text }).then(() => {
+      loadComments();
+    });
     addFormNameInput.value = "";
     addFormTextInput.value = "";
-
-    renderComments(comments, commentsList);
   });
 }

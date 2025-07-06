@@ -1,9 +1,9 @@
 import { escapeHtml } from "./utils.js";
 
 export function renderComments(comments, commentsList) {
-  commentsList.innerHTML = comments
+commentsList.innerHTML = comments
     .map((comment, index) => {
-      return `<li class="comment" data-index="${index}">
+    return `<li class="comment" data-index="${index}">
                 <div class="comment-header">
                     <div>${escapeHtml(comment.name)}</div>
                     <div>${comment.date}</div>
@@ -18,7 +18,7 @@ export function renderComments(comments, commentsList) {
                         <span class="likes-counter">${comment.likes}</span>
                         <button data-index="${index}" class="like-button ${
         comment.isLiked ? "-active-like" : ""
-      }"></button>
+    }"></button>
                     </div>
                 </div>
             </li>`;
