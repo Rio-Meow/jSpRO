@@ -1,4 +1,4 @@
-import { formatDate, escapeHtml } from "./utils.js";
+import { formatDate, escapeHtml, delay } from "./utils.js";
 import { renderComments } from "./render.js";
 
 export function handleAddLikeClick(comments) {
@@ -6,16 +6,26 @@ export function handleAddLikeClick(comments) {
     if (event.target.classList.contains("like-button")) {
       event.stopPropagation();
       const index = event.target.dataset.index;
+      const comment = comments[index];
 
-      if (comments[index].isLiked) {
-        comments[index].likes--;
-      } else {
-        comments[index].likes++;
+      if (comment.isLikeLoading) {
+        return;
       }
 
-      comments[index].isLiked = !comments[index].isLiked;
+      comment.isLikeLoading = true;
       const commentsList = document.querySelector(".comments");
       renderComments(comments, commentsList);
+
+      delay(2000)
+        .then(() => {
+          comment.likes = comment.isLiked ? comment.likes - 1 : comment.likes + 1;
+          comment.isLiked = !comment.isLiked;
+        })
+        .finally(() => {
+          comment.isLikeLoading = false;
+          const commentsList = document.querySelector(".comments");
+          renderComments(comments, commentsList);
+        });
     }
   });
 }
@@ -45,7 +55,9 @@ export function handleAddComment(
   commentsList,
   addComment,
   loadComments,
-  addCommentLoader 
+  addCommentLoader,
+  formNameValue,
+  formTextValue
 ) {
   addFormButton.addEventListener("click", () => {
     const name = escapeHtml(addFormNameInput.value);
@@ -62,8 +74,6 @@ export function handleAddComment(
     addComment({ name, text })
       .then(() => {
         loadComments();
-        addFormNameInput.value = "";
-        addFormTextInput.value = "";
       })
       .finally(() => {
         addFormButton.disabled = false;
@@ -71,5 +81,3 @@ export function handleAddComment(
       });
   });
 }
-
-

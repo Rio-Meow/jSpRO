@@ -25,6 +25,7 @@ try {
     });
 } catch (error) {
     console.error("Ошибка при получении комментариев:", error);
+    alert("Произошла ошибка при загрузке комментариев. Попробуйте позже.");
     return []; 
 }
 }
@@ -36,15 +37,21 @@ try {
     body: JSON.stringify({
         text,
         name,
+        forceError: true, 
     }),
     });
 
     if (!response.ok) {
+    if (response.status === 400) {
+        const errorBody = await response.json();
+        throw new Error(`Некорректный запрос: ${errorBody.error}`);
+    }
     throw new Error(`Ошибка при добавлении комментария: ${response.status}`);
     }
     return await response.json();
 } catch (error) {
     console.error("Ошибка при добавлении комментария:", error);
-    return null; 
+    alert(`Произошла ошибка при добавлении комментария: ${error.message}.`);
+    return null;
 }
 }
