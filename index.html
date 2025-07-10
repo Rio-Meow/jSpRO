@@ -8,6 +8,44 @@
 
   <body>
     <div class="container">
+      <div class="auth-form" id="auth-form">
+        <h2>Авторизация</h2>
+        <input
+          type="text"
+          id="login-input"
+          placeholder="Введите логин"
+        /><br />
+        <input
+          type="password"
+          id="password-input"
+          placeholder="Введите пароль"
+        /><br />
+        <button id="login-button">Войти</button>
+        <p id="auth-error" style="color: red; display: none">
+          Неверный логин или пароль
+        </p>
+        <a href="#" id="register-link">Зарегистрироваться</a>
+      </div>
+
+      <div class="register-form" id="register-form" style="display: none">
+        <h2>Регистрация</h2>
+        <input
+          type="text"
+          id="register-login-input"
+          placeholder="Введите логин"
+        /><br />
+        <input
+          type="password"
+          id="register-password-input"
+          placeholder="Введите пароль"
+        /><br />
+        <button id="register-button">Зарегистрироваться</button>
+        <p id="register-error" style="color: red; display: none">
+          Ошибка регистрации
+        </p>
+        <a href="#" id="login-link">Войти</a>
+      </div>
+
       <div class="loader" id="comments-loader">Загрузка комментариев...</div>
       <ul class="comments"></ul>
       <div class="add-form">

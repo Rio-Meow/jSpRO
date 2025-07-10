@@ -57,7 +57,8 @@ export function handleAddComment(
   loadComments,
   addCommentLoader,
   formNameValue,
-  formTextValue
+  formTextValue,
+  token
 ) {
   addFormButton.addEventListener("click", () => {
     const name = escapeHtml(addFormNameInput.value);
@@ -71,7 +72,7 @@ export function handleAddComment(
     addFormButton.disabled = true;
     addCommentLoader.style.display = "block";
 
-    addComment({ name, text })
+    addComment({ name, text, token })
       .then(() => {
         loadComments();
       })
