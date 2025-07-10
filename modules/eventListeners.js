@@ -41,7 +41,7 @@ export function handleAddCommentClick(comments) {
       const addFormTextInput = document.querySelector("#add-form-text");
 
       addFormNameInput.value = comment.name;
-      addFormTextInput.value = `> ${comment.name}: ${comment.text}\n`;
+      addFormTextInput.value = `> ${comment.text}\n`;
       addFormTextInput.focus();
     }
   });
@@ -62,7 +62,10 @@ export function handleAddComment(
 ) {
   addFormButton.addEventListener("click", () => {
     const name = escapeHtml(addFormNameInput.value);
-    const text = escapeHtml(addFormTextInput.value);
+    let text = addFormTextInput.value; //Убрали escapeHtml
+
+    // Удаляем пробелы в начале и в конце
+    text = text.trim();
 
     if (!name || !text) {
       alert("Пожалуйста, заполните все поля");
@@ -74,7 +77,11 @@ export function handleAddComment(
 
     addComment({ name, text, token })
       .then(() => {
-        loadComments();
+        loadComments(); // <---  ВАЖНО: Обновляем список комментариев
+      })
+      .catch(error => {
+          console.error("Ошибка при добавлении комментария:", error);
+          alert(`Произошла ошибка при добавлении комментария: ${error.message}.`);
       })
       .finally(() => {
         addFormButton.disabled = false;
