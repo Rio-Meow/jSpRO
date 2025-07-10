@@ -1,11 +1,11 @@
-import { formatDate, escapeHtml, delay } from "./utils.js";
-import { renderComments } from "./render.js";
+import { formatDate, escapeHtml, delay } from "./modules/utils.js";
+import { renderComments } from "./modules/render.js";
 import {
   handleAddComment,
   handleAddLikeClick,
   handleAddCommentClick,
-} from "./eventListeners.js";
-import { getComments, addComment, login, register, getToken } from "./api.js";
+} from "./modules/eventListeners.js";
+import { getComments, addComment, login, getToken } from "./modules/api.js";
 
 const addFormButton = document.querySelector("#add-form-button");
 const addFormNameInput = document.querySelector("#add-form-name");
@@ -37,6 +37,7 @@ async function loadComments() {
   commentsLoader.style.display = "block";
   try {
     comments = await getComments();
+    console.log("loadComments: Loaded comments:", comments);
     renderComments(comments, commentsList);
     handleAddLikeClick(comments);
     handleAddCommentClick(comments);
@@ -73,11 +74,11 @@ function showLoginForm() {
 
 if (token) {
   showAddForm();
-  loadComments();
 } else {
   hideAddForm();
-  loadComments();
 }
+
+loadComments();
 
 handleAddComment(
   addFormButton,
@@ -100,6 +101,7 @@ loginButton.addEventListener("click", () => {
   login({ login: loginValue, password: passwordValue })
     .then((newToken) => {
       token = newToken;
+      localStorage.setItem("token", token);
       showAddForm();
       loadComments();
     })
