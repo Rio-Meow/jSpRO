@@ -1,6 +1,6 @@
 import { formatDate, escapeHtml } from "./utils.js";
 import { renderComments } from "./render.js";
-import { addComment } from "./api.js";
+import { addComment } from "./api.js"; 
 
 export function handleAddLikeClick(comments) {
   document.addEventListener("click", (event) => {
@@ -32,7 +32,7 @@ export function handleAddCommentClick(comments) {
       const addFormTextInput = document.querySelector("#add-form-text");
 
       addFormNameInput.value = comment.name;
-      addFormTextInput.value = `${comment.text}\n`;
+      addFormTextInput.value = `> ${comment.text}\n`;
       addFormTextInput.focus();
     }
   });
@@ -44,10 +44,10 @@ export function handleAddComment(
   addFormTextInput,
   comments,
   commentsList,
-  loadComments 
+  loadComments,
 ) {
   addFormButton.addEventListener("click", async () => {
-    const name = escapeHtml(addFormNameInput.value);
+    let name = escapeHtml(addFormNameInput.value);
     let text = escapeHtml(addFormTextInput.value);
 
     if (!name || !text) {
@@ -65,15 +65,25 @@ export function handleAddComment(
     addFormButton.disabled = true;
 
     try {
-      await addComment({ name: name, text: text });
+      await addComment({ name: name, text: text, forceError: true }); 
 
       addFormNameInput.value = "";
       addFormTextInput.value = "";
-
+      sessionStorage.removeItem("storedName");
+      sessionStorage.removeItem("storedText");
       loadComments();
+
+
     } catch (error) {
       console.error("Ошибка при добавлении комментария:", error);
-      alert("Произошла ошибка при добавлении комментария. Попробуйте позже.");
+
+      if (error.message === "Failed to fetch") {
+        alert("Проблемы с соединением. Пожалуйста, попробуйте позже.");
+      } else if (error.message === "Validation error") {
+        alert("Слишком короткое имя или текст комментария.");
+      } else {
+        alert("Произошла ошибка при добавлении комментария. Попробуйте позже.");
+      }
     } finally {
       addFormButton.disabled = false;
     }

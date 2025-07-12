@@ -15,18 +15,20 @@ const loadingIndicator = document.createElement("p");
 
 let comments = [];
 let initialLoad = true; 
+let storedName = ""; 
+let storedText = ""; 
 
 async function loadComments() {
   if (initialLoad) {
     commentsList.innerHTML = "";
-    loadingIndicator.textContent = "Загрузка комментариев..."; 
+    loadingIndicator.textContent = "Загрузка комментариев...";
     commentsList.appendChild(loadingIndicator); 
   }
 
   try {
     comments = await getComments();
     if (initialLoad) {
-      loadingIndicator.remove();
+      loadingIndicator.remove(); 
     }
     renderComments(comments, commentsList);
     handleAddLikeClick(comments, commentsList);
@@ -41,7 +43,15 @@ async function loadComments() {
   }
 }
 
-loadComments();
+loadComments(); 
+
+addFormNameInput.addEventListener("input", () => {
+  storedName = addFormNameInput.value;
+});
+
+addFormTextInput.addEventListener("input", () => {
+  storedText = addFormTextInput.value;
+});
 
 handleAddComment(
   addFormButton,
@@ -49,7 +59,10 @@ handleAddComment(
   addFormTextInput,
   comments,
   commentsList,
-  loadComments 
+  loadComments,
 );
+
+addFormNameInput.value = storedName;
+addFormTextInput.value = storedText;
 
 console.log("It works! (main.js)");
