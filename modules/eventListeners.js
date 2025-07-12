@@ -1,0 +1,70 @@
+import { formatDate, escapeHtml } from "./utils.js";
+import { renderComments } from "./render.js";
+import { addComment } from "./api.js";
+
+export function handleAddLikeClick(comments) {
+  document.addEventListener("click", (event) => {
+    if (event.target.classList.contains("like-button")) {
+      event.stopPropagation();
+      const index = event.target.dataset.index;
+
+      if (comments[index].isLiked) {
+        comments[index].likes--;
+      } else {
+        comments[index].likes++;
+      }
+
+      comments[index].isLiked = !comments[index].isLiked;
+      const commentsList = document.querySelector(".comments");
+      renderComments(comments, commentsList);
+    }
+  });
+}
+
+export function handleAddCommentClick(comments) {
+  document.addEventListener("click", (event) => {
+    if (event.target.closest(".comment") && !event.target.closest(".like-button")) {
+      const commentElement = event.target.closest(".comment");
+      const index = commentElement.dataset.index;
+      const comment = comments[index];
+
+      const addFormNameInput = document.querySelector("#add-form-name");
+      const addFormTextInput = document.querySelector("#add-form-text");
+
+      addFormNameInput.value = comment.name;
+      addFormTextInput.value = `> ${comment.name}: ${comment.text}\n`;
+      addFormTextInput.focus();
+    }
+  });
+}
+
+export function handleAddComment(
+  addFormButton,
+  addFormNameInput,
+  addFormTextInput,
+  comments,
+  commentsList,
+  loadComments
+) {
+  addFormButton.addEventListener("click", async () => {
+    const name = escapeHtml(addFormNameInput.value);
+    const text = escapeHtml(addFormTextInput.value);
+
+    if (!name || !text) {
+      alert("Пожалуйста, заполните все поля");
+      return;
+    }
+
+    try {
+      await addComment({ name: name, text: text });
+
+      addFormNameInput.value = "";
+      addFormTextInput.value = "";
+
+      loadComments();
+    } catch (error) {
+      console.error("Ошибка при добавлении комментария:", error);
+      alert("Произошла ошибка при добавлении комментария. Попробуйте позже.");
+    }
+  });
+}
