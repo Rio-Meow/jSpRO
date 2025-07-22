@@ -1,6 +1,4 @@
-import { formatDate, escapeHtml } from "./utils.js";
 import { renderComments } from "./render.js";
-import { addComment } from "./api.js";
 
 export function handleAddLikeClick(comments) {
   document.addEventListener("click", (event) => {
@@ -28,54 +26,10 @@ export function handleAddCommentClick(comments) {
       const index = commentElement.dataset.index;
       const comment = comments[index];
 
-      const addFormNameInput = document.querySelector("#add-form-name");
       const addFormTextInput = document.querySelector("#add-form-text");
 
-      addFormNameInput.value = comment.name;
       addFormTextInput.value = `${comment.text}\n`;
       addFormTextInput.focus();
-    }
-  });
-}
-
-export function handleAddComment(
-  addFormButton,
-  addFormNameInput,
-  addFormTextInput,
-  comments,
-  commentsList,
-  loadComments 
-) {
-  addFormButton.addEventListener("click", async () => {
-    const name = escapeHtml(addFormNameInput.value);
-    let text = escapeHtml(addFormTextInput.value);
-
-    if (!name || !text) {
-      alert("Пожалуйста, заполните все поля");
-      return;
-    }
-
-    text = text.trim();
-
-    if (!text) {
-      alert("Пожалуйста, введите непустой комментарий");
-      return;
-    }
-
-    addFormButton.disabled = true;
-
-    try {
-      await addComment({ name: name, text: text });
-
-      addFormNameInput.value = "";
-      addFormTextInput.value = "";
-
-      loadComments();
-    } catch (error) {
-      console.error("Ошибка при добавлении комментария:", error);
-      alert("Произошла ошибка при добавлении комментария. Попробуйте позже.");
-    } finally {
-      addFormButton.disabled = false;
     }
   });
 }

@@ -9,7 +9,25 @@
   <body>
     <div class="container">
       <ul class="comments"></ul>
-      <div class="add-form">
+
+      <div id="auth-form" class="auth-form">
+        <h3>Авторизация</h3>
+        <input
+          type="text"
+          id="login-input"
+          class="auth-form-input"
+          placeholder="Логин"
+        />
+        <input
+          type="password"
+          id="password-input"
+          class="auth-form-input"
+          placeholder="Пароль"
+        />
+        <button id="login-button" class="auth-form-button">Войти</button>
+      </div>
+
+      <div id="add-form" class="add-form">
         <input
           type="text"
           class="add-form-name"
@@ -19,7 +37,7 @@
         <textarea
           type="textarea"
           class="add-form-text"
-          placeholder="Введите ваш коментарий"
+          placeholder="Введите ваш комментарий"
           rows="4"
           id="add-form-text"
         ></textarea>
@@ -29,6 +47,6 @@
       </div>
     </div>
 
-    <script type="module" src="jsmain.js"></script>
+    <script type="module" src="jsmain.js" defer></script>
   </body>
 </html>
