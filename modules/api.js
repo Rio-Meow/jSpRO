@@ -37,7 +37,6 @@ export async function addComment({ name, text }) {
       method: "POST",
       headers: {
         Authorization: `key ${token}`,
-        "Content-Type": "application/json",
       },
       body: JSON.stringify({
         name: name,
