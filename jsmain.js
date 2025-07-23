@@ -29,8 +29,8 @@ async function loadComments() {
       loadingIndicator.remove();
     }
     renderComments(comments, commentsList);
-    handleAddLikeClick(comments, commentsList);
-    handleAddCommentClick(comments, commentsList);
+    handleAddLikeClick(comments);
+    handleAddCommentClick(comments); 
   } catch (error) {
     console.error("Ошибка при загрузке комментариев:", error);
     if (initialLoad) {
@@ -48,7 +48,6 @@ handleAddComment(
   addFormNameInput,
   addFormTextInput,
   comments,
-  commentsList,
   loadComments 
 );
 

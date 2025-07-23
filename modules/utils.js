@@ -1,27 +1,53 @@
 export function formatDate(date) {
-  if (!(date instanceof Date)) {
-    return "";
-  }
+    if (!date) {
+        return "";
+    }
 
-  const day = String(date.getDate()).padStart(2, "0");
-  const month = String(date.getMonth() + 1).padStart(2, "0");
-  const year = date.getFullYear();
-  const hours = String(date.getHours()).padStart(2, "0");
-  const minutes = String(date.getMinutes()).padStart(2, "0");
+    if (!(date instanceof Date)) {
+        return "";
+    }
 
-  return `${day}.${month}.${year} ${hours}:${minutes}`;
+    const day = String(date.getDate()).padStart(2, "0");
+    const month = String(date.getMonth() + 1).padStart(2, "0");
+    const year = date.getFullYear();
+    const hours = String(date.getHours()).padStart(2, "0");
+    const minutes = String(date.getMinutes()).padStart(2, "0");
+
+    return `${day}.${month}.${year} ${hours}:${minutes}`;
 }
 
 export function escapeHtml(text) {
-  return text
-    .replaceAll("&", "&amp;")
-    .replaceAll("<", "&lt;")
-    .replaceAll(">", "&gt;")
-    .replaceAll('"', "&quot;")
-    .replaceAll("'", "&#039;");
+    return text
+        .replaceAll("&", "&amp;")
+        .replaceAll("<", "&lt;")
+        .replaceAll(">", "&gt;")
+        .replaceAll('"', "&quot;")
+        .replaceAll("'", "&#039;")
+        .replaceAll("&lt;", "< ") 
+        .replaceAll("&gt;", " >");
 }
 
 export function parseAndFormatDate(dateString) {
-  const date = new Date(dateString.substring(0, 19).replace("T", " "));
-  return formatDate(date);
+    if (!dateString) {
+        return "";
+    }
+
+    try {
+        const date = new Date(dateString);
+
+        if (isNaN(date.getTime())) {
+            return "Неверная дата";
+        }
+
+        return formatDate(date);
+    } catch (error) {
+        console.error("Ошибка при парсинге даты:", error);
+        return "Неверная дата";
+    }
+}
+
+export function decodeHtml(text) {
+    const element = document.createElement('textarea');
+    element.innerHTML = text;
+    return element.value;
 }

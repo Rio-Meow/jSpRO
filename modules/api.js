@@ -1,4 +1,4 @@
-const API_URL = "https://webdev-hw-api.vercel.app/api/v1/alina-kalinina";
+const API_URL = "https://webdev-hw-api.vercel.app/api/v1/nadezhda-larinina";
 
 export async function getComments() {
 try {
