@@ -23,6 +23,6 @@ export function escapeHtml(text) {
 
 export function parseAndFormatDate(dateString) {
   const date = new Date(dateString.substring(0, 19).replace("T", " "));
-  date.setHours(date.getHours() + 3); // Добавляем 3 часа (предполагается UTC+3)
+  date.setHours(date.getHours() + 3); 
   return formatDate(date);
 }
