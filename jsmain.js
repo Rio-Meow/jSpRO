@@ -56,16 +56,13 @@ addFormButton.addEventListener("click", () => {
   const name = document.querySelector("#add-form-name").value;
   const text = addFormTextInput.value;
 
-  console.log("Name:", name);  
-  console.log("Text:", text);  
+  console.log("Name:", name);
+  console.log("Text:", text);
 
   if (!name || !text) {
       alert("Пожалуйста, заполните все поля");
       return;
   }
-
-  addComment({ name, text })
-
 
   addComment({ name, text })
     .then(() => {
